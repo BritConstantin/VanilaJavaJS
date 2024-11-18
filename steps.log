@@ -1,0 +1,26 @@
+1. create db
+2. create backend
+3. create front end
+4. create docker immage for be
+5. create docker immage for fe
+6. create full stack docker image fe+be+db
+    docker-compose up --build 
+    docker-compose down -v
+    // debugging of docker issues
+    docker logs poc_db
+    docker exec -it poc_db mysql -u user -ppassword poc_db
+    docker
+
+
+Prepare the Raspberry Pi:
+    1. Ensure Docker and Docker Compose are installed on the Raspberry Pi.
+    2. Ensure that the Raspberry Pi is connected to the same local network as your development machine (for easier deployment and testing).
+Transfer the Project Files:
+    1. You can either transfer the project files to the Raspberry Pi or use Docker images to directly pull them onto the Raspberry Pi.
+    2. A convenient way is to build your images locally, push them to a Docker registry (such as Docker Hub), and then pull them onto the Raspberry Pi.
+Run Docker Compose on Raspberry Pi:
+    1. Use the docker-compose.yml file to start the entire stack.
+    2. You may need to make slight adjustments, especially if there are changes in networking (such as IP addresses).
+
+Test the Setup:
+    1. Access the frontend endpoint via your Raspberry Pi's IP address from other devices on your network.

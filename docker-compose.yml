@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: poc_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: poc_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql-schema.sql:/docker-entrypoint-initdb.d/mysql-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=root || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: poc-backend
+    container_name: poc_backend
+
+    build:
+      context: ./poc_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/poc_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+
+  frontend:
+    image: poc-frontend
+    container_name: poc_fe
+    build:
+      context: ./poc_fe
+    depends_on:
+      - backend
+    ports:
+      - "3001:3000"
+
+volumes:
+  db_data:
